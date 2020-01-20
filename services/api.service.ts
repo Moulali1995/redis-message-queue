@@ -109,7 +109,7 @@ const ApiService: ServiceSchema = {
 				onAfterCall(ctx:any, route:any, req:any, res:any, data:any) {
 					// send a Cookie header with JWT token once login is completed
 					// set cookie headers
-					ctx.meta.$responseHeaders={'Cookie':`session_token=${data.key}`}
+					ctx.meta.$responseHeaders={'Set-Cookie':`session_token=${data.key}`}
 					return data;
                 }
 				

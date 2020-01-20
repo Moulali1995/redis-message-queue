@@ -1,4 +1,6 @@
 const E = require("moleculer-web").Errors;
+
+const cookie = require('cookie');
 export class Authorization{
     /**
 			 * Authorize the user from request
@@ -16,21 +18,9 @@ export class Authorization{
 			if(req.headers.cookie){
 				
 				// retrieve the cookie data from the incoming cookie string value consisting of all the cookies
-				let cookie_data=req.headers.cookie.split(';')
-				let valid_cookie_data=cookie_data.map((obj:any)=>{
-				const cookie_obj={
-					name:obj.slice(0,obj.indexOf('=')).trim(),
-					value:obj.slice(obj.indexOf('=')+1)
-				}
-				return cookie_obj;
-				})
-				// filter the cookie with cookie.name is 'session_token' which consists jwt token
-				var data= valid_cookie_data.filter((obj:any)=>{
-					return obj.name==='session_token'
-				})
-			
-				// Verify jwt token
-				let token = data[0].value
+				let cookie_data=cookie.parse(req.headers.cookie)
+				console.log("cookie_data----------------------------",cookie_data)
+				let token = cookie_data.session_token
 				if (token) {
 					let decoded = await ctx.call('auth.verifyToken',{token:token})
                     if (decoded) {
@@ -39,11 +29,11 @@ export class Authorization{
 						// Refresh the token if the expiry time nearby
 					if(Math.floor((decoded.exp-new Date().getTime()/1000)/60)<Number(process.env.REFRESH_JWT_EXPIRESIN))
 					{
-						 data[0].value=await ctx.call('auth.generateToken',{payload:decoded})
+						 token=await ctx.call('auth.generateToken',{payload:decoded})
 					}
 						ctx.meta.user=decoded
 						ctx.meta.$responseHeaders={
-							'Cookie':`${data[0].name}=${data[0].value}`
+							'Set-Cookie':`session_token=${token}`
 						}
 						return Promise.resolve(ctx);
                     } else

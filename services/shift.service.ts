@@ -2,6 +2,7 @@
 import { Context } from 'moleculer';
 import { Action, BaseSchema, Method } from 'moleculer-decorators';
 import { getConnection } from 'typeorm';
+const cookie = require('cookie');
 //#endregion Global Imports
 
 export class ShiftService extends BaseSchema {
@@ -25,9 +26,8 @@ export class ShiftService extends BaseSchema {
 
 		}
 	})
-	public async getUsers() {
+	public async getUsers(ctx:Context<any>):Promise<any> {
 		// how to access the session id here?
-		
 		return "user details";
 	}
 
