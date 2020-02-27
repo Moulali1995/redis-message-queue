@@ -4,6 +4,11 @@ import { Action, BaseSchema, Method } from 'moleculer-decorators';
 //#endregion Global Imports
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+
+const cookie = require('cookie');
+import genuuid from 'uuid/v4';
+const redis = require('redis');
+var redisClient = redis.createClient();
 //#region Interface Imports
 //#endregion Interface Imports
 
@@ -61,6 +66,10 @@ export class AuthService extends BaseSchema {
 				}
 					// setting the expiry date of token as 1 year
 					let token= await ctx.call('auth.generateToken',{payload:payload})
+					ctx.meta.$responseHeaders = {
+						'Set-Cookie': `session_token=${token};Path=/;Max-Age=${Number(process.env.COOKIE_MAXAGE) *
+							60}`,
+					};
 					return {key:token}
 				
 			} else {
@@ -76,11 +85,11 @@ export class AuthService extends BaseSchema {
 	}
 	// addIpRange creation API ends here //
 
-	// getIpRange listing API starts here //
+	//#region ───────────────────────────────── VERIFY TOKEN API STARTS HERE ──────────────────
 	@Action({
 		params: {
-			token: { type: "string" }
-		}
+			token: { type: 'string' },
+		},
 	})
 	public async verifyToken(ctx: Context<any>): Promise<any> {
 		return this.verifyTokenMethod(ctx);
@@ -89,52 +98,58 @@ export class AuthService extends BaseSchema {
 	@Method
 	public async verifyTokenMethod(ctx: Context<any>): Promise<any> {
 		let { token } = ctx.params;
-		try{
-			let secret:any = process.env.SECRET_KEY
-			let decoded= jwt.verify(token,secret)
+		try {
+			let secret: any = process.env.SECRET_KEY;
+			let decoded = jwt.verify(token, secret);
 			return decoded;
-		}
-		catch (Error) {
+		} catch (Error) {
 			return false;
 		}
-
 	}
 
-	// Generate a jwt token
+	//#endregion ──────────────────────────────────────── VERIFY TOKEN API ENDS HERE ─────
+
+	//#region ───────────────────────────────── GENERATE TOKEN API STARTS HERE ──────────────────
 	@Action({
 		params: {
-			payload: { type: "object", props: {
-				id: { type: "number", positive: true },
-				username: { type: "string" },
-				role:  { type: "string" }
-			}  }
-		}
+			payload: {
+				type: 'object',
+				props: {
+					id: { type: 'number', positive: true },
+					username: { type: 'string' },
+					role: { type: 'string' },
+				},
+			},
+		},
 	})
 	public async generateToken(ctx: Context<any>): Promise<any> {
 		return this.generateTokenMethod(ctx);
 	}
 
 	@Method
-	public async generateTokenMethod(ctx: Context<any>):Promise<any>
-	{
-		try{
-			const params = ctx.params.payload
-		let secret:any=process.env.SECRET_KEY
-		let expiresIn:any=process.env.JWT_EXPIRESIN
-		let payload_data={
-			id:params.id,
-			username:params.username,
-			role:params.role
-		}
-		let token= jwt.sign(payload_data,secret, { expiresIn: expiresIn })
-		return token;
-		}
-		catch(Error){
-			return Error.name
-		 
+	public async generateTokenMethod(ctx: Context<any>): Promise<any> {
+		try {
+			const params = ctx.params.payload;
+			let secret: any = process.env.SECRET_KEY;
+			let expiresIn: any = process.env.JWT_EXPIRESIN;
+			let payload_data = {
+				id: params.id,
+				username: params.username,
+				role: params.role,
+			};
+			let token = jwt.sign(payload_data, secret, { expiresIn: expiresIn });
+			const uuid = genuuid();
+			redisClient.set(uuid, token);
+			return uuid;
+		} catch (Error) {
+			return Error;
 		}
 	}
-	// public stopped: Function = async () => await getConnection().close();
+
+	//#endregion ──────────────────────────────────────── GENERATE TOKEN API ENDS HERE ─────
+
+	//public stopped: Function = async () => await getConnection().close();
 }
+
 
 module.exports = new AuthService();

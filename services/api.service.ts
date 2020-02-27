@@ -1,5 +1,5 @@
 //#region Global Imports
-import { ServiceSchema } from 'moleculer';
+import { ServiceSchema, Context } from 'moleculer';
 import ApiGateway = require('moleculer-web');
 import {Authorization} from '@Meta/Authorization'
 //import genuuid from 'uuid/v4'
@@ -19,35 +19,6 @@ const ApiService: ServiceSchema = {
 	// More info about settings: https://moleculer.services/docs/0.13/moleculer-web.html
 	settings: {
 		port: process.env.PORT || 3000,
-		use:[
-			function createSession(req:any,res:any,next:any){
-			console.log("********************************************************")
-			// REDIS-CLIENT NOT WORKING 
-			
-			redisClient.on('connect', ()=>{
-			console.log('redis connected')
-			})
-
-			redisClient.on('error', (err:any) => {
-			console.log('Redis error: ', err);
-		  	});	
-		  
-		 	// REDIS-CLIENT WITH EXPRESS SESSION NOT WORKING
-		  	
-			session({ 
-			// genid: function() {
-			//   return genuuid() // use UUIDs for session IDs
-			// },
-			name:'_redisClient',
-			secret: 'keyboardcat',
-			saveUninitialized: false, resave: false,
-			cookie: { domain:host, maxAge: 1000*60*3, httpOnly:false , secure: false},
-			store: new redisStore({ host: host, port: 6379, client: redisClient, ttl : 86400 }),
-
-		})
-		next();
-			}
-		],
 		routes: [
 			{
 				aliases: {
@@ -106,12 +77,13 @@ const ApiService: ServiceSchema = {
 				bodyParsers: {
 					json: true
 				},
-				onAfterCall(ctx:any, route:any, req:any, res:any, data:any) {
-					// send a Cookie header with JWT token once login is completed
-					// set cookie headers
-					ctx.meta.$responseHeaders={'Set-Cookie':`session_token=${data.key}`}
+				async onBeforeCall(ctx: Context, route: any, req: any, res: any) {
+					// Set session_token value to cookie context meta property
+					ctx.meta.cookie = req.headers.cookie;
+				},
+				onAfterCall(ctx: any, route: any, req: any, res: any, data: any) {
 					return data;
-                }
+				},
 				
 			}
 		],
