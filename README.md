@@ -1,4 +1,4 @@
-# moleculerjs-redis-jwt-express-session
+# moleculerjs-redis-jwt-session
 
 This project involves basic local authentication(username and password) with JWT and maintaing sessions with redis.
 Getting set up 👍
