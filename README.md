@@ -1,21 +1,16 @@
 # moleculerjs-redis-jwt-session
 
-This project involves basic local authentication (username and password) with JWT and maintaing sessions with redis.
-Getting set up 👍
-Required software
+This project involves basic local authentication (username and password) with JWT and maintaining sessions with redis.
 
-Before starting, make sure your computer has up-to-date versions of the following installed:
+Getting set up :+1:
+## Required software/tools
+1. Node.js
+2. Git
+3. VS Code Editor
+4. AWS credentials
 
-    Node
-    Git
-    Visual Studio Code/Any other editor
-    Redis
-
-Installing and opening the project
-
-    Use Git & VS Code/Any other Editor for cloning and opening the project.
-    Use the cd <folder-name> command to find an appropriate place for your code.
-    Type git clone <repo url> into the terminal to pull down a copy of the code.
-    Type cd <folder-name> to enter the project folder.
-    Type npm install to install all of the project dependencies.
-    Run the code in node with npm start
+## Run Project
+1. `git clone <git-repo-url>`.
+2. `cd <project-folder>`.
+3. `npm i`.
+4. `npm start`
