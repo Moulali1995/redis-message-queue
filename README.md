@@ -1,6 +1,6 @@
 # redis-message-queue
 
-Message queues using redis. Create and add jobs to queue and let the redis queue processor do the job at some point of time.
+Message queues using redis. Create and add jobs to queue and let the redis queue processor do the job.
 
 Getting set up :+1:
 ## Required software/tools
