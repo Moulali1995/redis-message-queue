@@ -1,6 +1,6 @@
-# moleculerjs-redis-jwt-session
+# redis-message-queue
 
-This project involves basic local authentication (username and password) with JWT and maintaining sessions with redis.
+Message queues using redis. Create and add jobs to queue and let the redis queue processor do the job at some point of time.
 
 Getting set up :+1:
 ## Required software/tools
