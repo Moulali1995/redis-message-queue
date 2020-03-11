@@ -7,7 +7,7 @@ Getting set up :+1:
 1. Node.js
 2. Git
 3. VS Code Editor
-4. AWS credentials
+4. Redis
 
 ## Run Project
 1. `git clone <git-repo-url>`.
