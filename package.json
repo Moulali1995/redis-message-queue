@@ -1,5 +1,5 @@
 {
-  "name": "redis-session-moleculerjs",
+  "name": "redis-message-queue",
   "version": "1.0.0",
   "description": "My Moleculer microservices project",
   "scripts": {
@@ -32,7 +32,7 @@
     "@pankod/pankod-cli": "^0.2.3",
     "@types/jest": "^23.1.1",
     "@types/jsonwebtoken": "^8.3.5",
-    "@types/node": "^10.17.11",
+    "@types/node": "^10.17.17",
     "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "^1.9.0",
     "@typescript-eslint/parser": "^1.9.0",
@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/bull": "^3.12.1",
     "@types/connect-redis": "0.0.13",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.2",
@@ -61,6 +62,7 @@
     "@types/uuid": "^3.4.6",
     "aws-sdk": "^2.559.0",
     "bcrypt": "^3.0.6",
+    "bull": "^3.13.0",
     "class-transformer": "^0.2.3",
     "connect-redis": "^4.0.3",
     "cookie": "^0.4.0",

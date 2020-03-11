@@ -1,1 +1,1 @@
-export { ShiftService } from './shift.service';
+export { JobsService } from './jobs.service;

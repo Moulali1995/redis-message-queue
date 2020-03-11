@@ -23,7 +23,7 @@ const brokerConfig: BrokerOptions = {
 	// Namespace of nodes to segment your nodes on the same network.
 	namespace: "",
 	// Unique node identifier. Must be unique in a namespace.
-	nodeID: undefined,
+	nodeID: `redis-queue-${process.pid}`,
 
 	// Enable/disable logging or use custom logger. More info: https://moleculer.services/docs/0.13/logging.html
 	logger: true,
@@ -37,12 +37,8 @@ const brokerConfig: BrokerOptions = {
 	// Define transporter.
 	// More info: https://moleculer.services/docs/0.13/networking.html
 	transporter: {
-        type: "NATS",
-        options: {
-            url: "nats://localhost:4222"
-            // user: "admin",
-            // pass: "1234"
-        }
+        type: "Redis",
+        
 	},
 
 	// Define a serializer.
