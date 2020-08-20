@@ -61,7 +61,7 @@
     "@types/redis": "^2.8.14",
     "@types/uuid": "^3.4.6",
     "aws-sdk": "^2.559.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "bull": "^3.13.0",
     "class-transformer": "^0.2.3",
     "connect-redis": "^4.0.3",
